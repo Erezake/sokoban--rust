@@ -298,6 +298,45 @@ impl<'a> Painter<'a> {
 
         canvas.present();
     }
+
+    /// 绘制通关界面并等待用户输入
+    pub fn paint_complete_screen(&mut self, canvas: &mut Canvas<Window>) {
+        canvas.clear();
+
+        // 加载开始界面图片
+        let creator = canvas.texture_creator();
+        let start_screen_texture = creator.load_texture("assets/image/_screen.png").unwrap();
+
+        // 获取窗口尺寸
+        let window_width = self.screen_size.0 as f32;
+        let window_height = self.screen_size.1 as f32;
+        
+        // 获取图片原始尺寸
+        let texture_width = start_screen_texture.query().width as f32;
+        let texture_height = start_screen_texture.query().height as f32;
+
+        // 计算缩放比例（保持宽高比，使图片完全适应窗口）
+        let scale = (window_width / texture_width).min(window_height / texture_height);
+        
+        // 计算缩放后的图片尺寸
+        let scaled_width = (texture_width * scale) as u32;
+        let scaled_height = (texture_height * scale) as u32;
+
+        // 计算图片居中的位置
+        let x = ((window_width - scaled_width as f32) / 2.0) as i32;
+        let y = ((window_height - scaled_height as f32) / 2.0) as i32;
+
+        // 将缩放后的图片复制到画布上
+        canvas
+           .copy(
+                &start_screen_texture, 
+                None, 
+                Some(Rect::new(x, y, scaled_width, scaled_height))
+            )
+           .unwrap();
+        canvas.present();
+    }
+
 }
 
 /// Returns the shadow flags for a particular position in the given level.

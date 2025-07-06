@@ -22,6 +22,7 @@ extern crate clap;
 extern crate sdl2;
 extern crate xml;
 
+use sdl2::EventPump;
 use clap::App;
 use sdl2::event::Event;
 use sdl2::image::LoadTexture;
@@ -173,10 +174,11 @@ fn load_tileset<P: AsRef<Path>>(
     let tileset = Tileset::new(texture, width, height, effective_height, offset);
     Ok(tileset)
 }
+
 /// 显示开始界面并等待用户输入
 fn show_start_screen(sdl: &Sdl, painter: &mut Painter, canvas: &mut Canvas<Window>) {
     let mut events = sdl.event_pump().unwrap();
-    let mut waiting = true;
+    let mut waiting: bool = true;
     while waiting {
         painter.paint_start_screen(canvas);
         for event in events.poll_iter() {
@@ -196,6 +198,36 @@ fn show_start_screen(sdl: &Sdl, painter: &mut Painter, canvas: &mut Canvas<Windo
         }
     }
 }
+
+/// 显示通关界面并等待用户输入
+fn show_complete_screen(
+    painter: &mut Painter,
+    canvas: &mut Canvas<Window>, 
+    event_pump: &mut EventPump,
+    
+) {
+    let mut waiting = true;
+    
+    while waiting {
+        painter.paint_complete_screen(canvas);  // 确保绘制正确的界面
+        for event in event_pump.poll_iter() {
+            match event {
+                Event::Quit { .. }
+                | Event::KeyDown {
+                    keycode: Some(Keycode::Escape),
+                    ..
+                } => {
+                    waiting = false;
+                }
+                Event::KeyDown { .. } => {
+                    waiting = false;  // 按下任意键继续
+                }
+                _ => {}
+            }
+        }
+    }
+}
+
 /// Main game event loop
 fn mainloop<'a, I: Iterator<Item = &'a Level>>(
     sdl: &Sdl,
@@ -213,7 +245,7 @@ fn mainloop<'a, I: Iterator<Item = &'a Level>>(
     };
 
     let mut running = true;
-    let mut events = sdl.event_pump().unwrap();
+    let mut events=sdl.event_pump().unwrap();
     let mut skip = false;
     let mut paused = false; // 新增暂停状态
 
@@ -221,6 +253,7 @@ fn mainloop<'a, I: Iterator<Item = &'a Level>>(
         if level.is_completed() || skip {
             match levels.next() {
                 Some(l) => {
+                    show_complete_screen(painter, canvas,&mut events,);
                     reference_level = l;
                     level = l.clone();
                     skip = false;
