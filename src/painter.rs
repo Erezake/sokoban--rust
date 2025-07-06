@@ -18,6 +18,7 @@ use sdl2::rect::Rect;
 use sdl2::render::Canvas;
 use sdl2::ttf::Font;
 use sdl2::video::Window;
+use sdl2::image::LoadTexture;
 
 use game::{Direction, Level, Position};
 use shadow::ShadowFlags;
@@ -234,6 +235,68 @@ impl<'a> Painter<'a> {
 
     fn tileset(&self) -> &Tileset {
         self.selector.select()
+    }
+
+    /// 绘制开始界面
+    pub fn paint_start_screen(&mut self, canvas: &mut Canvas<Window>) {
+        canvas.clear();
+
+        // 加载开始界面图片
+        let creator = canvas.texture_creator();
+        let start_screen_texture = creator.load_texture("assets/image/start_screen.png").unwrap();
+
+        // 获取窗口尺寸
+        let window_width = self.screen_size.0 as f32;
+        let window_height = self.screen_size.1 as f32;
+        
+        // 获取图片原始尺寸
+        let texture_width = start_screen_texture.query().width as f32;
+        let texture_height = start_screen_texture.query().height as f32;
+
+        // 计算缩放比例（保持宽高比，使图片完全适应窗口）
+        let scale = (window_width / texture_width).min(window_height / texture_height);
+        
+        // 计算缩放后的图片尺寸
+        let scaled_width = (texture_width * scale) as u32;
+        let scaled_height = (texture_height * scale) as u32;
+
+        // 计算图片居中的位置
+        let x = ((window_width - scaled_width as f32) / 2.0) as i32;
+        let y = ((window_height - scaled_height as f32) / 2.0) as i32;
+
+        // 将缩放后的图片复制到画布上
+        canvas
+           .copy(
+                &start_screen_texture, 
+                None, 
+                Some(Rect::new(x, y, scaled_width, scaled_height))
+            )
+           .unwrap();
+
+        canvas.present();
+    }
+
+    /// 绘制暂停界面（只叠加文字，不加黑色遮罩）
+    pub fn paint_pause_screen(&mut self, canvas: &mut Canvas<Window>) {
+        // 英文提示，字体大一点
+        let text = "Paused. Press SPACE to continue";
+        // 使用更大的字体
+        // 假设你有 self.font_large，如果没有，可以直接用 self.font
+        let surface = self.font
+            .render(text)
+            .blended(Color::RGBA(255, 255, 255, 255))
+            .unwrap();
+        let creator = canvas.texture_creator();
+        let texture = creator.create_texture_from_surface(&surface).unwrap();
+        let (w, h) = {
+            let q = texture.query();
+            (q.width, q.height)
+        };
+        let x = ((self.screen_size.0 - w) / 2) as i32;
+        let y = ((self.screen_size.1 - h) / 2) as i32;
+        let _ = canvas.copy(&texture, None, Some(Rect::new(x, y, w, h)));
+
+        canvas.present();
     }
 }
 

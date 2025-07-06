@@ -173,7 +173,29 @@ fn load_tileset<P: AsRef<Path>>(
     let tileset = Tileset::new(texture, width, height, effective_height, offset);
     Ok(tileset)
 }
-
+/// 显示开始界面并等待用户输入
+fn show_start_screen(sdl: &Sdl, painter: &mut Painter, canvas: &mut Canvas<Window>) {
+    let mut events = sdl.event_pump().unwrap();
+    let mut waiting = true;
+    while waiting {
+        painter.paint_start_screen(canvas);
+        for event in events.poll_iter() {
+            match event {
+                Event::Quit { .. }
+                | Event::KeyDown {
+                    keycode: Some(Keycode::Escape),
+                    ..
+                } => {
+                    std::process::exit(0);
+                }
+                Event::KeyDown { .. } => {
+                    waiting = false;
+                }
+                _ => {}
+            }
+        }
+    }
+}
 /// Main game event loop
 fn mainloop<'a, I: Iterator<Item = &'a Level>>(
     sdl: &Sdl,
@@ -181,6 +203,8 @@ fn mainloop<'a, I: Iterator<Item = &'a Level>>(
     painter: &mut Painter,
     canvas: &mut Canvas<Window>,
 ) {
+    show_start_screen(sdl, painter, canvas);
+    
     let (mut reference_level, mut level) = match levels.next() {
         Some(l) => (l, l.clone()),
         None => {
@@ -191,6 +215,8 @@ fn mainloop<'a, I: Iterator<Item = &'a Level>>(
     let mut running = true;
     let mut events = sdl.event_pump().unwrap();
     let mut skip = false;
+    let mut paused = false; // 新增暂停状态
+
     while running {
         if level.is_completed() || skip {
             match levels.next() {
@@ -205,7 +231,11 @@ fn mainloop<'a, I: Iterator<Item = &'a Level>>(
             }
         }
 
-        painter.paint(canvas, &level);
+        if paused {
+            painter.paint_pause_screen(canvas);
+        } else {
+            painter.paint(canvas, &level);
+        }
 
         match events.wait_event() {
             Event::Quit { .. }
@@ -213,6 +243,18 @@ fn mainloop<'a, I: Iterator<Item = &'a Level>>(
                 keycode: Some(Keycode::Escape),
                 ..
             } => running = false,
+
+            Event::KeyDown {
+                keycode: Some(Keycode::Space),
+                ..
+            } => {
+                paused = !paused;
+            }
+
+            _ if paused => {
+                // 暂停时忽略其它事件
+            }
+
             Event::KeyDown {
                 keycode: Some(Keycode::Left),
                 ..
