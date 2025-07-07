@@ -1,76 +1,80 @@
-# sokoban-rs
+# sokoban-rs 推箱子游戏
 
-[![Build Status](https://travis-ci.org/swatteau/sokoban-rs.svg)](https://travis-ci.org/swatteau/sokoban-rs)
-[![crates.io](https://img.shields.io/badge/crates.io-v1.2.2-brightgreen.svg)](https://crates.io/crates/sokoban-rs)
-[![License](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+本项目基于 Rust 语言实现了经典推箱子游戏（Sokoban）。
+在原有版本基础上，我们增加了 **开始界面**、**通关界面**和**音效支持**等等，提升了游戏体验。
 
-This is an implementation of Sokoban in the [Rust Programming Language](https://www.rust-lang.org).
+原有版本：https://github.com/swatteau/sokoban-rs
 
-An example level:
-![Screenshot](assets/image/screenshot.png)
+![开始界面](assets/image/start_screen.png)
 
-## Build Instructions
+---
 
-Before building `sokoban-rs`, you will need to install the developpement libraries for [SDL2](https://www.libsdl.org), preferably with the package manager that comes
-with your operating system.
+## 项目简介
 
-Example for Debian/Ubuntu:
+推箱子是一款经典益智游戏，玩家需要推动箱子到指定位置完成关卡。
+本项目旨在锻炼 Rust 编程和 SDL2 图形音频库的实战能力，适合学习和团队合作开发。
 
-    sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
+---
 
-Example for Mac OSX
+## 环境依赖
 
-    brew install sdl2 sdl2_image sdl2_ttf
+请先安装 SDL2 及相关开发库，建议使用系统包管理器完成安装：
 
-You might also like to read the README for these projects:
+* Debian/Ubuntu：
 
-- <https://github.com/AngryLawyer/rust-sdl2>
-- <https://github.com/xsleonard/rust-sdl2_image>
-- <https://github.com/andelf/rust-sdl2_ttf>
+  ```bash
+  sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
+  ```
+* Mac OSX（Homebrew）：
 
-To build `sokoban-rs`, type the following commands:
+  ```bash
+  brew install sdl2 sdl2_image sdl2_ttf
+  ```
 
-    git clone https://github.com/swatteau/sokoban-rs
-    cd sokoban-rs
-    cargo build --release
+---
 
-## How to Play
+## 构建与运行
 
-This game is released without any level. You can download level collections from <http://www.sourcecode.se/sokoban/levels> in the SLC (XML) format. For a quick start, try this:
+1. 确保已安装 Rust 开发环境和 Cargo 工具。
 
-    wget http://www.sourcecode.se/sokoban/download/microban.slc
-    cargo run --release -- microban.slc
+2. 在项目根目录下运行：
 
-- Use the arrow keys to move the player.
-- Type `R` to retry the current level.
-- Type `N` to skip the current level.
+   ```bash
+   cargo build --release
+   ```
 
-## Graphics Options
+3. 运行游戏并加载关卡文件（例如 `100Boxes.slc`）：
 
-By default, the game will start in 1024x768 windowed mode.
-You can modify the width and height of the window as well as switch to fullscreen mode.
+   ```bash
+   cargo run --release -- 100Boxes.slc
+   ```
 
-Example:
+---
 
-    cargo run --release -- microban.slc --width=1920 --height=1080 --fullscreen
+## 关卡资源下载
 
-## Credits
+请访问以下地址下载丰富的关卡集合：
+[http://www.sourcecode.se/sokoban/levels.php](http://www.sourcecode.se/sokoban/levels.php)
 
-- [Planet Cute](http://www.lostgarden.com/2007/05/dancs-miraculously-flexible-game.html) art by Daniel Cook (Lostgarden.com)
-- Ruji's Handwriting Font by Ruji C. (rujic.net)
+---
 
-## License
+## 游戏操作
 
-    Copyright 2015-2018 Sébastien Watteau
+* 方向键：控制玩家移动
+* `R`：重玩当前关卡
+* `N`：跳过当前关卡
 
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
+---
 
-        http://www.apache.org/licenses/LICENSE-2.0
+## 新增功能说明
 
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
+* **开始界面**：游戏启动时显示欢迎和菜单
+* **通关界面**：完成所有关卡后展示祝贺信息
+* **音效支持**：包含玩家移动、推箱及通关音效，提升沉浸感
+
+---
+
+## 许可证
+
+本项目采用 Apache 2.0 开源许可协议，详情见：
+[http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
