@@ -1,9 +1,9 @@
 # sokoban-rs 推箱子游戏
 
 本项目基于 Rust 语言实现了经典推箱子游戏（Sokoban）。
-在原有版本基础上，我们增加了 **开始界面**、**通关界面**和**音效支持**等等，提升了游戏体验。
+在原有版本基础上，我们增加了 **开始界面**、**通关界面**和**音效支持**等功能，提升了游戏体验。
 
-原有版本：https://github.com/swatteau/sokoban-rs
+原项目地址：[https://github.com/swatteau/sokoban-rs](https://github.com/swatteau/sokoban-rs)
 
 ![开始界面](assets/image/start_screen.png)
 
@@ -68,13 +68,19 @@
 
 ## 新增功能说明
 
-* **开始界面**：游戏启动时显示欢迎和菜单
-* **通关界面**：完成所有关卡后展示祝贺信息
-* **音效支持**：包含玩家移动、推箱及通关音效，提升沉浸感
+* 新增开始界面，提升游戏交互体验  
+* 新增通关界面，完成时给予视觉反馈  
+* 集成音效，增加操作和通关音效  
+* 其它性能优化与bug修复
 
 ---
 
-## 许可证
+## 致谢与版权声明
 
-本项目采用 Apache 2.0 开源许可协议，详情见：
-[http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+本项目基于 [sokoban-rs](https://github.com/swatteau/sokoban-rs)（作者：Sébastien Watteau）开发，
+在尊重原作者劳动成果的基础上进行二次开发和功能拓展，作为学生课程大作业使用。
+
+本项目及原项目均采用 Apache 2.0 开源许可协议，
+详见官方许可证：[http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0) 。
+
+请遵守许可条款合理使用、传播及修改本项目代码。
