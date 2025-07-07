@@ -44,10 +44,12 @@ pub mod game;
 pub mod painter;
 pub mod shadow;
 pub mod tileset;
+pub mod sound;
 
 use game::{Direction, Level};
 use painter::Painter;
 use tileset::Tileset;
+use sound::Sounds;
 
 pub fn main() -> Result<(), Box<dyn Error>> {
     // Read command line arguments
@@ -90,8 +92,9 @@ pub fn main() -> Result<(), Box<dyn Error>> {
         let font = ttf_context.load_font("assets/font/RujisHandwritingFontv.2.0.ttf", 20)?;
         Painter::new(&mut canvas, big_set, small_set, font)
     };
-
-    mainloop(&sdl, levels.iter(), &mut painter, &mut canvas);
+    let sounds = Sounds::load().expect("Failed to load sounds");
+    
+    mainloop(&sdl, levels.iter(), &mut painter, &mut canvas, &sounds);
 
     Ok(())
 }
@@ -176,7 +179,8 @@ fn load_tileset<P: AsRef<Path>>(
 }
 
 /// 显示开始界面并等待用户输入
-fn show_start_screen(sdl: &Sdl, painter: &mut Painter, canvas: &mut Canvas<Window>) {
+fn show_start_screen(sdl: &Sdl, painter: &mut Painter, canvas: &mut Canvas<Window>, sounds: &Sounds) {
+        sdl2::mixer::Music::play(&sounds.bgm, -1).ok();
     let mut events = sdl.event_pump().unwrap();
     let mut waiting: bool = true;
     while waiting {
@@ -189,8 +193,13 @@ fn show_start_screen(sdl: &Sdl, painter: &mut Painter, canvas: &mut Canvas<Windo
                     ..
                 } => {
                     std::process::exit(0);
+                    // 停止BGM并退出
+                    sdl2::mixer::Music::halt();
+                    std::process::exit(0);
                 }
                 Event::KeyDown { .. } => {
+                    // 停止BGM并进入游戏
+                    sdl2::mixer::Music::halt();
                     waiting = false;
                 }
                 _ => {}
@@ -204,8 +213,9 @@ fn show_complete_screen(
     painter: &mut Painter,
     canvas: &mut Canvas<Window>, 
     event_pump: &mut EventPump,
-    
+    sound: &Sounds,
 ) {
+    sdl2::mixer::Channel::all().play(&sound.win, 0).ok();
     let mut waiting = true;
     
     while waiting {
@@ -234,8 +244,9 @@ fn mainloop<'a, I: Iterator<Item = &'a Level>>(
     mut levels: I,
     painter: &mut Painter,
     canvas: &mut Canvas<Window>,
+    sounds: &Sounds,
 ) {
-    show_start_screen(sdl, painter, canvas);
+    show_start_screen(sdl, painter, canvas, sounds);
     
     let (mut reference_level, mut level) = match levels.next() {
         Some(l) => (l, l.clone()),
@@ -251,9 +262,10 @@ fn mainloop<'a, I: Iterator<Item = &'a Level>>(
 
     while running {
         if level.is_completed() || skip {
+            sdl2::mixer::Channel::all().play(&sounds.win, 1).ok();
             match levels.next() {
                 Some(l) => {
-                    show_complete_screen(painter, canvas,&mut events,);
+                    show_complete_screen(painter, canvas, &mut events, sounds);
                     reference_level = l;
                     level = l.clone();
                     skip = false;
@@ -282,6 +294,7 @@ fn mainloop<'a, I: Iterator<Item = &'a Level>>(
                 ..
             } => {
                 paused = !paused;
+                sdl2::mixer::Channel::all().play(&sounds.pause, 0).ok();
             }
 
             _ if paused => {
@@ -293,24 +306,28 @@ fn mainloop<'a, I: Iterator<Item = &'a Level>>(
                 ..
             } => {
                 level.step(Direction::Left);
+                sdl2::mixer::Channel::all().play(&sounds.walk, 0).ok();
             }
             Event::KeyDown {
                 keycode: Some(Keycode::Right),
                 ..
             } => {
                 level.step(Direction::Right);
+                sdl2::mixer::Channel::all().play(&sounds.walk, 0).ok();
             }
             Event::KeyDown {
                 keycode: Some(Keycode::Up),
                 ..
             } => {
                 level.step(Direction::Up);
+                sdl2::mixer::Channel::all().play(&sounds.walk, 0).ok();
             }
             Event::KeyDown {
                 keycode: Some(Keycode::Down),
                 ..
             } => {
                 level.step(Direction::Down);
+                sdl2::mixer::Channel::all().play(&sounds.walk, 0).ok();
             }
             Event::KeyDown {
                 keycode: Some(Keycode::R),
