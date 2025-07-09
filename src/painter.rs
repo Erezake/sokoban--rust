@@ -305,7 +305,7 @@ impl<'a> Painter<'a> {
 
         // 加载开始界面图片
         let creator = canvas.texture_creator();
-        let start_screen_texture = creator.load_texture("assets/image/_screen.png").unwrap();
+        let start_screen_texture = creator.load_texture("assets/image/complete_screen.png").unwrap();
 
         // 获取窗口尺寸
         let window_width = self.screen_size.0 as f32;

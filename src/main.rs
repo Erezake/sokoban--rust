@@ -192,10 +192,9 @@ fn show_start_screen(sdl: &Sdl, painter: &mut Painter, canvas: &mut Canvas<Windo
                     keycode: Some(Keycode::Escape),
                     ..
                 } => {
-                    std::process::exit(0);
                     // 停止BGM并退出
                     sdl2::mixer::Music::halt();
-                    std::process::exit(0);
+                    //std::process::exit(0);
                 }
                 Event::KeyDown { .. } => {
                     // 停止BGM并进入游戏

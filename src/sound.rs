@@ -11,7 +11,7 @@ pub struct Sounds<'a> {
 impl<'a> Sounds<'a> {
     pub fn load() -> Result<Self, String> {
         sdl2::mixer::open_audio(44_100, AUDIO_S16LSB, DEFAULT_CHANNELS, 1024)?;
-        sdl2::mixer::init(InitFlag::OGG | InitFlag::MP3);
+        sdl2::mixer::init(InitFlag::OGG | InitFlag::MP3).expect("Failed to initialize SDL2_mixer");
         sdl2::mixer::allocate_channels(8);
 
         Ok(Sounds {
