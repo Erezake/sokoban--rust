@@ -78,16 +78,16 @@ pub fn main() -> Result<(), Box<dyn Error>> {
             "assets/image/tileset.png",
             101,
             171,
-            83,
-            40,
+            120,
+            0,
         )?;
         let small_set = load_tileset(
             &texture_creator,
             "assets/image/tileset-small.png",
             50,
             85,
-            41,
-            20,
+            60,
+            0,
         )?;
         let font = ttf_context.load_font("assets/font/RujisHandwritingFontv.2.0.ttf", 20)?;
         Painter::new(&mut canvas, big_set, small_set, font)

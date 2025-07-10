@@ -32,8 +32,8 @@ pub enum Tile {
     Square,
     /// Player tile
     Player,
-    /// Shadow tile
-    Shadow(ShadowFlags),
+    // Shadow tile
+    //Shadow(ShadowFlags),
 }
 
 pub struct Tileset<'a> {
@@ -94,15 +94,15 @@ impl<'a> Tileset<'a> {
             Tile::Rock => Some((2, 0)),
             Tile::Square => Some((1, 0)),
             Tile::Player => Some((3, 0)),
-            Tile::Shadow(ShadowFlags::N_EDGE) => Some((4, 0)),
-            Tile::Shadow(ShadowFlags::S_EDGE) => Some((5, 0)),
-            Tile::Shadow(ShadowFlags::E_EDGE) => Some((0, 1)),
-            Tile::Shadow(ShadowFlags::W_EDGE) => Some((1, 1)),
-            Tile::Shadow(ShadowFlags::NE_CORNER) => Some((2, 1)),
-            Tile::Shadow(ShadowFlags::NW_CORNER) => Some((3, 1)),
-            Tile::Shadow(ShadowFlags::SE_CORNER) => Some((4, 1)),
-            Tile::Shadow(ShadowFlags::SW_CORNER) => Some((5, 1)),
-            Tile::Shadow(ShadowFlags { .. }) => None,
+            // Tile::Shadow(ShadowFlags::N_EDGE) => Some((4, 0)),
+            // Tile::Shadow(ShadowFlags::S_EDGE) => Some((5, 0)),
+            // Tile::Shadow(ShadowFlags::E_EDGE) => Some((0, 1)),
+            // Tile::Shadow(ShadowFlags::W_EDGE) => Some((1, 1)),
+            // Tile::Shadow(ShadowFlags::NE_CORNER) => Some((2, 1)),
+            // Tile::Shadow(ShadowFlags::NW_CORNER) => Some((3, 1)),
+            // Tile::Shadow(ShadowFlags::SE_CORNER) => Some((4, 1)),
+            // Tile::Shadow(ShadowFlags::SW_CORNER) => Some((5, 1)),
+            // Tile::Shadow(ShadowFlags { .. }) => None,
         }
     }
 
@@ -111,17 +111,13 @@ impl<'a> Tileset<'a> {
     pub fn get_coordinates(&self, pos: &Position) -> (i32, i32) {
         let x = self.width as i32 * pos.column();
         let y = self.effective_height as i32 * pos.row();
-        (x, y)
+        (x, y-50)
     }
 
     /// Returns the full size needed to draw a level of the given dimensions.
     pub fn get_rendering_size(&self, extents: (i32, i32)) -> (u32, u32) {
         let width = extents.0 as u32 * self.width;
-        let height = if extents.1 > 0 {
-            self.height + (extents.1 - 1) as u32 * self.effective_height
-        } else {
-            0
-        };
+        let height = extents.1 as u32 * self.effective_height; // 直接计算实际高度，移除多余的 self.height
         (width, height)
     }
 

@@ -115,21 +115,21 @@ impl<'a> Painter<'a> {
                 }
 
                 // Add the shadows
-                let flags = get_shadow_flags(&level, &pos);
-                for f in &[
-                    ShadowFlags::N_EDGE,
-                    ShadowFlags::S_EDGE,
-                    ShadowFlags::E_EDGE,
-                    ShadowFlags::W_EDGE,
-                    ShadowFlags::NE_CORNER,
-                    ShadowFlags::NW_CORNER,
-                    ShadowFlags::SE_CORNER,
-                    ShadowFlags::SW_CORNER,
-                ] {
-                    if flags.contains(*f) {
-                        self.paint_tile(canvas, Tile::Shadow(*f), x, y);
-                    }
-                }
+                // let flags = get_shadow_flags(&level, &pos);
+                // for f in &[
+                //     ShadowFlags::N_EDGE,
+                //     ShadowFlags::S_EDGE,
+                //     ShadowFlags::E_EDGE,
+                //     ShadowFlags::W_EDGE,
+                //     ShadowFlags::NE_CORNER,
+                //     ShadowFlags::NW_CORNER,
+                //     ShadowFlags::SE_CORNER,
+                //     ShadowFlags::SW_CORNER,
+                // ] {
+                //     if flags.contains(*f) {
+                //         self.paint_tile(canvas, Tile::Shadow(*f), x, y);
+                //     }
+                // }
 
                 // Draw the other items
                 let z = y - self.tileset().offset();
@@ -339,45 +339,45 @@ impl<'a> Painter<'a> {
 
 }
 
-/// Returns the shadow flags for a particular position in the given level.
-fn get_shadow_flags(level: &Level, pos: &Position) -> ShadowFlags {
-    let north = pos.neighbor(Direction::Up);
-    let south = pos.neighbor(Direction::Down);
-    let west = pos.neighbor(Direction::Left);
-    let east = pos.neighbor(Direction::Right);
+// Returns the shadow flags for a particular position in the given level.
+// fn get_shadow_flags(level: &Level, pos: &Position) -> ShadowFlags {
+//     let north = pos.neighbor(Direction::Up);
+//     let south = pos.neighbor(Direction::Down);
+//     let west = pos.neighbor(Direction::Left);
+//     let east = pos.neighbor(Direction::Right);
 
-    let mut flags = ShadowFlags::empty();
-    if level.is_wall(&north) {
-        flags |= ShadowFlags::N_EDGE;
-    }
-    if level.is_wall(&south) {
-        flags |= ShadowFlags::S_EDGE;
-    }
-    if level.is_wall(&west) {
-        flags |= ShadowFlags::W_EDGE;
-    }
-    if level.is_wall(&east) {
-        flags |= ShadowFlags::E_EDGE;
-    }
-    if level.is_wall(&north.neighbor(Direction::Right))
-        && !flags.intersects(ShadowFlags::N_EDGE | ShadowFlags::E_EDGE)
-    {
-        flags |= ShadowFlags::NE_CORNER;
-    }
-    if level.is_wall(&north.neighbor(Direction::Left))
-        && !flags.intersects(ShadowFlags::N_EDGE | ShadowFlags::W_EDGE)
-    {
-        flags |= ShadowFlags::NW_CORNER;
-    }
-    if level.is_wall(&south.neighbor(Direction::Right))
-        && !flags.intersects(ShadowFlags::S_EDGE | ShadowFlags::E_EDGE)
-    {
-        flags |= ShadowFlags::SE_CORNER;
-    }
-    if level.is_wall(&south.neighbor(Direction::Left))
-        && !flags.intersects(ShadowFlags::S_EDGE | ShadowFlags::W_EDGE)
-    {
-        flags |= ShadowFlags::SW_CORNER;
-    }
-    flags
-}
+//     let mut flags = ShadowFlags::empty();
+//     if level.is_wall(&north) {
+//         flags |= ShadowFlags::N_EDGE;
+//     }
+//     if level.is_wall(&south) {
+//         flags |= ShadowFlags::S_EDGE;
+//     }
+//     if level.is_wall(&west) {
+//         flags |= ShadowFlags::W_EDGE;
+//     }
+//     if level.is_wall(&east) {
+//         flags |= ShadowFlags::E_EDGE;
+//     }
+//     if level.is_wall(&north.neighbor(Direction::Right))
+//         && !flags.intersects(ShadowFlags::N_EDGE | ShadowFlags::E_EDGE)
+//     {
+//         flags |= ShadowFlags::NE_CORNER;
+//     }
+//     if level.is_wall(&north.neighbor(Direction::Left))
+//         && !flags.intersects(ShadowFlags::N_EDGE | ShadowFlags::W_EDGE)
+//     {
+//         flags |= ShadowFlags::NW_CORNER;
+//     }
+//     if level.is_wall(&south.neighbor(Direction::Right))
+//         && !flags.intersects(ShadowFlags::S_EDGE | ShadowFlags::E_EDGE)
+//     {
+//         flags |= ShadowFlags::SE_CORNER;
+//     }
+//     if level.is_wall(&south.neighbor(Direction::Left))
+//         && !flags.intersects(ShadowFlags::S_EDGE | ShadowFlags::W_EDGE)
+//     {
+//         flags |= ShadowFlags::SW_CORNER;
+//     }
+//     flags
+// }
