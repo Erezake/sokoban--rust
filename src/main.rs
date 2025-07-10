@@ -38,6 +38,7 @@ use std::path::Path;
 use std::str::FromStr;
 use xml::reader::EventReader;
 use xml::reader::XmlEvent;
+use sdl2::image::LoadSurface; 
 
 pub mod error;
 pub mod game;
@@ -160,7 +161,16 @@ fn create_window(
     } else {
         window_builder.position_centered();
     }
-    let window = window_builder.opengl().build()?;
+    // 声明 window 为 mutable
+    let mut window = window_builder.opengl().build()?;
+
+    // 初始化 SDL_image
+    let image_context = sdl2::image::init(InitFlag::PNG | InitFlag::JPG)?;
+    
+    // 使用 LoadSurface trait 加载图标
+    let icon_surface = sdl2::surface::Surface::from_file("assets/image/icon.ico")?;
+    window.set_icon(icon_surface);
+
     Ok(window)
 }
 

@@ -13,10 +13,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use game::Position;
+use crate::game::Position;
 use sdl2::rect::Rect;
 use sdl2::render::Texture;
-use shadow::ShadowFlags;
 use std::cmp;
 
 /// Represents a kind of tile.

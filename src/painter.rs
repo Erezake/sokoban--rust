@@ -20,9 +20,8 @@ use sdl2::ttf::Font;
 use sdl2::video::Window;
 use sdl2::image::LoadTexture;
 
-use game::{Direction, Level, Position};
-use shadow::ShadowFlags;
-use tileset::{Tile, Tileset, TilesetSelector};
+use crate::game::{Level, Position};
+use crate::tileset::{Tile, Tileset, TilesetSelector};
 
 /// The Painter struct is responsible for drawing the game onto the screen.
 pub struct Painter<'a> {
