@@ -5,16 +5,11 @@
 
 原项目地址：[https://github.com/swatteau/sokoban-rs](https://github.com/swatteau/sokoban-rs)
 
-![开始界面](assets/image/start_screen.png)
-
----
 
 ## 项目简介
 
 推箱子是一款经典益智游戏，玩家需要推动箱子到指定位置完成关卡。
 本项目旨在锻炼 Rust 编程和 SDL2 图形音频库的实战能力，适合学习和团队合作开发。
-
----
 
 ## 环境依赖
 
@@ -31,7 +26,6 @@
   brew install sdl2 sdl2_image sdl2_ttf
   ```
 
----
 
 ## 构建与运行
 
@@ -49,14 +43,12 @@
    cargo run --release -- 100Boxes.slc
    ```
 
----
 
 ## 关卡资源下载
 
 请访问以下地址下载丰富的关卡集合：
 [http://www.sourcecode.se/sokoban/levels.php](http://www.sourcecode.se/sokoban/levels.php)
 
----
 
 ## 游戏操作
 
@@ -64,7 +56,6 @@
 * `R`：重玩当前关卡
 * `N`：跳过当前关卡
 
----
 
 ## 新增功能说明
 
@@ -73,7 +64,6 @@
 * 集成音效，增加操作和通关音效  
 * 其它性能优化与bug修复
 
----
 
 ## 致谢与版权声明
 
